@@ -1,4 +1,4 @@
-name: Build Otaghe Ma APK
+۸name: Build Otaghe Ma APK
 
 on:
   workflow_dispatch:
@@ -28,9 +28,10 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Check Firebase
-        run: |
-          test -f OtagheMa_v3_cloud/app/google-services.json
+      - name: Add Firebase config
+  run: |
+    cp app/google-services.json OtagheMa_v3_cloud/app/google-services.json
+    test -f OtagheMa_v3_cloud/app/google-services.json
 
       - name: Build APK
         run: |
