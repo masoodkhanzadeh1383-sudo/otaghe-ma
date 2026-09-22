@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "519582735836",
+    "project_id": "otaghema-bfb0d",
+    "storage_bucket": "otaghema-bfb0d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:519582735836:android:05f53299d37df48f20c319",
+        "android_client_info": {
+          "package_name": "com.otaghema.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJDu0r9Ajqb39feMx9Tjr4k0Sql2F4Y7c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
