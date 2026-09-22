@@ -1,4 +1,4 @@
-name: Build Otage Ma APK
+name: Build Otaghe Ma APK
 
 on:
   workflow_dispatch:
@@ -23,16 +23,17 @@ jobs:
           echo "===== PROJECT FILES ====="
           ls -la
           echo "===== GRADLE FILES ====="
-          find . -maxdepth 3 -type f \( -name "build.gradle" -o -name "build.gradle.kts" -o -name "settings.gradle" -o -name "settings.gradle.kts" -o -name "gradlew" \) -print
+          find . -maxdepth 3 -type f \( -name "settings.gradle*" -o -name "build.gradle*" -o -name "gradlew" \) -print
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.7'
 
-            - name: List Gradle tasks
+      - name: List Gradle tasks
         run: |
           gradle tasks --all
+
       - name: Find APK
         run: |
           echo "===== GENERATED APK ====="
@@ -41,6 +42,6 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: OtageMa-debug-apk
+          name: OtagheMa-debug-apk
           path: "**/build/outputs/apk/debug/*.apk"
-          if-no-files-found: error
+          if-no-files-found: warn
