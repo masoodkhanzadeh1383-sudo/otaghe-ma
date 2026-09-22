@@ -24,23 +24,16 @@ jobs:
           ls -la
           echo ""
           echo "===== GRADLE FILES ====="
-          find . -maxdepth 3 -type f \( -name "gradlew" -o -name "build.gradle" -o -name "settings.gradle" \) -print
+          find . -maxdepth 3 -type f \( -name "build.gradle" -o -name "build.gradle.kts" -o -name "settings.gradle" -o -name "settings.gradle.kts" \) -print
 
-      - name: Find Gradle wrapper
-        run: |
-          if [ -f "./gradlew" ]; then
-            echo "Gradle wrapper found in root."
-            chmod +x ./gradlew
-          else
-            echo "ERROR: gradlew was not found."
-            echo "The project needs a Gradle wrapper."
-            exit 1
-          fi
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
 
       - name: Build Debug APK
         run: |
-          chmod +x ./gradlew
-          ./gradlew assembleDebug --stacktrace
+          gradle assembleDebug --stacktrace
 
       - name: Find APK
         run: |
