@@ -30,10 +30,9 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.7'
-
-      - name: Build Debug APK
-        run: |
-          gradle assembleDebug --stacktrace
+          - name: List Gradle tasks
+  run: |
+    gradle tasks --all
 
       - name: Find APK
         run: |
