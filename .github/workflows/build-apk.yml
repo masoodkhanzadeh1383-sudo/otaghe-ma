@@ -30,14 +30,15 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: List Gradle tasks
-        run: |
-          gradle :app:tasks --all
+      - - name: List Gradle tasks
+  run: |
+    chmod +x ./gradlew
+    ./gradlew :app:tasks --all
 
-      - name: Build APK
-        run: |
-          gradle :app:assembleDebug
-
+- name: Build APK
+  run: |
+    chmod +x ./gradlew
+    ./gradlew :app:assembleDebug
       - name: Find APK
         run: |
           echo "===== GENERATED APK ====="
