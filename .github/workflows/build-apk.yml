@@ -1,13 +1,3 @@
-name: Build Otaghe Ma APK
-
-on:
-  workflow_dispatch:
-
-jobs:
-  build:
-    name: Build Android APK
-    runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -23,14 +13,18 @@ jobs:
           echo "===== PROJECT FILES ====="
           ls -la
           echo "===== GRADLE FILES ====="
-          find . -maxdepth 3 -type f \( -name "settings.gradle*" -o -name "build.gradle*" -o -name "gradlew" \) -print
+          find . -maxdepth 3 -type f \( -name "settings.gradle*" -o -name "build.gradle*" \) -print
 
-        - name: Set up Gradle
-      uses: gradle/actions/setup-gradle@v4
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
 
-            - name: List Gradle tasks
+      - name: List Gradle tasks
         run: |
-          gradle :app:tasks --all
+          ./gradlew :app:tasks --all
+
+      - name: Build APK
+        run: |
+          ./gradlew :app:assembleDebug
 
       - name: Find APK
         run: |
@@ -40,6 +34,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: OtagheMa-debug-apk
-          path: "**/build/outputs/apk/debug/*.apk"
-          if-no-files-found: warn
+          name: app-debug-apk
+          path: app/build/outputs/apk/**/*.apk
