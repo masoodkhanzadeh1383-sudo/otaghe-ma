@@ -31,7 +31,7 @@ jobs:
         with:
           gradle-version: '8.7'
           - name: List Gradle tasks
-  run: |
+          run: |
     gradle tasks --all
 
       - name: Find APK
