@@ -1,0 +1,44 @@
+name: Build Otaghe Ma APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Extract project
+        run: |
+          unzip -q OtagheMa_v3_cloud_build.zip
+          cd OtagheMa_v3_cloud
+          echo "Project extracted"
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '8.9'
+
+      - name: Check Firebase
+        run: |
+          test -f OtagheMa_v3_cloud/app/google-services.json
+
+      - name: Build APK
+        run: |
+          cd OtagheMa_v3_cloud
+          gradle :app:assembleDebug --stacktrace
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: OtagheMa-debug-apk
+          path: OtagheMa_v3_cloud/app/build/outputs/apk/debug/app-debug.apk
