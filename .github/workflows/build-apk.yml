@@ -25,10 +25,14 @@ jobs:
           echo "===== PROJECT FILES ====="
           ls -la
           echo "===== GRADLE FILES ====="
-          find . -maxdepth 3 -type f \( -name "settings.gradle*" -o -name "build.gradle*" \) -print
+          find . -maxdepth 3 -type f \( -name "settings.gradle*" -o -name "build.gradle*" -o -name "gradlew" \) -print
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+
+      - name: Make Gradle executable
+        run: |
+          chmod +x ./gradlew
 
       - name: List Gradle tasks
         run: |
@@ -47,4 +51,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-apk
-          path: app/build/outputs/apk/**/*.apk
+          path: '**/build/outputs/apk/**/*.apk'
