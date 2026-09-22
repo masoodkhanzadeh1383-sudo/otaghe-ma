@@ -32,8 +32,14 @@ jobs:
           gradle-version: '8.7'
           - name: List Gradle tasks
           run: |
-    gradle tasks --all
+              - name: Set up Gradle
+      uses: gradle/actions/setup-gradle@v4
+      with:
+        gradle-version: '8.7'
 
+    - name: List Gradle tasks
+      run: |
+        gradle tasks --all
       - name: Find APK
         run: |
           echo "===== GENERATED APK ====="
