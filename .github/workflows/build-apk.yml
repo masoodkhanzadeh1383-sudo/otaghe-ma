@@ -26,29 +26,27 @@ jobs:
           echo "===== PROJECT FILES ====="
           ls -la
 
-          echo "===== GRADLE FILES ====="
-          find . -maxdepth 3 -type f \( \
-            -name "settings.gradle" \
-            -o -name "settings.gradle.kts" \
-            -o -name "build.gradle" \
+          echo "===== ALL GRADLE FILES ====="
+          find . -maxdepth 4 -type f \( \
+            -name "build.gradle" \
             -o -name "build.gradle.kts" \
-            -o -name "gradlew" \
+            -o -name "settings.gradle" \
+            -o -name "settings.gradle.kts" \
+            -o -name "gradle.properties" \
           \) -print
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
-
-      - name: Make gradlew executable
-        run: |
-          chmod +x ./gradlew
+        with:
+          gradle-version: '8.7'
 
       - name: List Gradle tasks
         run: |
-          ./gradlew :app:tasks --all
+          gradle :app:tasks --all
 
       - name: Build APK
         run: |
-          ./gradlew :app:assembleDebug
+          gradle :app:assembleDebug
 
       - name: Find APK
         run: |
