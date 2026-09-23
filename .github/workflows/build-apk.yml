@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build
+    name: Build Android APK
     runs-on: ubuntu-latest
 
     steps:
@@ -21,12 +21,45 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Show project files
+      - name: Check project files
         run: |
-          echo "===== PROJECT FILES ====="
+          echo "===== ROOT FILES ====="
           ls -la
 
-          echo "===== ALL GRADLE FILES ====="
+          echo "===== APP ZIP ====="
+          ls -lh app.zip
+
+      - name: Extract app.zip
+        run: |
+          echo "===== EXTRACTING APP.ZIP ====="
+
+          rm -rf extracted_app
+          mkdir -p extracted_app
+
+          unzip -q app.zip -d extracted_app
+
+          echo "===== EXTRACTED FILES ====="
+          find extracted_app -maxdepth 3 -type f | head -100
+
+          if [ -d "extracted_app/app" ]; then
+            echo "Found app/ inside ZIP"
+            rm -rf app
+            mv extracted_app/app app
+          else
+            echo "No app/ folder inside ZIP"
+            echo "Putting ZIP contents into app/"
+            rm -rf app
+            mkdir -p app
+            cp -r extracted_app/. app/
+          fi
+
+          echo "===== APP FOLDER ====="
+          find app -maxdepth 3 -type f | head -100
+
+      - name: Check Gradle files
+        run: |
+          echo "===== GRADLE FILES ====="
+
           find . -maxdepth 4 -type f \( \
             -name "build.gradle" \
             -o -name "build.gradle.kts" \
@@ -38,23 +71,28 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '8.7'
+          gradle-version: '8.9'
 
-      - name: List Gradle tasks
+      - name: Show Gradle tasks
         run: |
+          echo "===== GRADLE TASKS ====="
           gradle :app:tasks --all
 
-      - name: Build APK
+      - name: Build Debug APK
         run: |
-          gradle :app:assembleDebug
+          echo "===== BUILDING APK ====="
+          gradle :app:assembleDebug --stacktrace
 
       - name: Find APK
+        if: always()
         run: |
-          echo "===== GENERATED APK ====="
+          echo "===== GENERATED APK FILES ====="
           find . -type f -name "*.apk" -print
 
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-apk
           path: '**/build/outputs/apk/**/*.apk'
+          if-no-files-found: error
